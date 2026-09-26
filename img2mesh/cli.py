@@ -28,7 +28,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
     g = p.add_argument_group("shape")
     g.add_argument("--resolution", type=int, default=d.resolution,
-                   help="mesh grid cells along the long side (detail vs. file size)")
+                   help="mesh grid cells along the subject's long side (detail vs. file size)")
     g.add_argument("--depth-scale", type=float, default=d.depth_scale,
                    help="front relief depth relative to object size")
     g.add_argument("--thickness", type=float, default=d.thickness,

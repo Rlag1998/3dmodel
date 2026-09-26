@@ -40,6 +40,19 @@ def _foreground(image: Image.Image, opts: Options) -> np.ndarray:
     return models.segment(image, opts.segment_model)
 
 
+def _subject_box(mask: np.ndarray, margin: float = 0.03) -> tuple[int, int, int, int]:
+    """Bounding box (left, top, right, bottom) of the mask plus a small margin."""
+    ys, xs = np.nonzero(mask)
+    pad = int(round(margin * max(np.ptp(ys), np.ptp(xs)))) + 2
+    h, w = mask.shape
+    return (
+        max(0, xs.min() - pad),
+        max(0, ys.min() - pad),
+        min(w, xs.max() + 1 + pad),
+        min(h, ys.max() + 1 + pad),
+    )
+
+
 def convert(image_path: Path, out_dir: Path, opts: Options | None = None) -> dict[str, Path]:
     """Convert one image; returns the written files keyed by kind."""
     opts = opts or Options()
@@ -52,8 +65,12 @@ def convert(image_path: Path, out_dir: Path, opts: Options | None = None) -> dic
     mask = clean_mask(prob, opts.mesh.mask_threshold, opts.mesh.keep_all_parts)
     disparity = models.estimate_depth(image, opts.depth_model, opts.depth_resolution)
 
-    surface = build_surface(mask, disparity, opts.mesh)
-    texture = export.make_texture(image, mask, opts.back_texture)
+    # Work on the subject's bounding box so the mesh resolution and texture
+    # are spent on the object, however small it is in the frame.
+    box = _subject_box(mask)
+    mask_c = mask[box[1] : box[3], box[0] : box[2]]
+    surface = build_surface(mask_c, disparity[box[1] : box[3], box[0] : box[2]], opts.mesh)
+    texture = export.make_texture(image.crop(box), mask_c, opts.back_texture)
     mesh = export.textured_mesh(surface, texture, stem)
 
     written: dict[str, Path] = {}

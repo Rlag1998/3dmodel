@@ -54,7 +54,7 @@ On the first run the default models (~570 MB) are downloaded into `~/.cache/img2
 
 | Flag | Default | Effect |
 | --- | --- | --- |
-| `--resolution N` | 384 | Grid cells along the long side. Higher means more detail and bigger files. |
+| `--resolution N` | 384 | Grid cells along the subject's long side. Higher means more detail and bigger files. |
 | `--depth-scale F` | 0.35 | Depth of the front relief relative to the object's size. |
 | `--thickness F` | 0.7 | How far the back bulges out (1.0 = round limbs, 0 = flat back). |
 | `--front-bulge F` | 0.15 | Extra rounding of the front toward the outline. |
