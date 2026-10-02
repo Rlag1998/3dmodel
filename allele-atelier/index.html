@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Allele Atelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400;1,500&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="brand">
+    <h1>Allele <em>Atelier</em></h1>
+    <p>Portraits grown from a simulated human genome. Two founders, 64 loci on 23 chromosome pairs, and real meiosis: every child gets a fresh shuffle of crossovers, so siblings share parents but not faces.</p>
+  </div>
+  <div class="mast-controls">
+    <label class="field" for="mu">
+      <span>Mutation rate per locus</span>
+      <input type="range" id="mu" min="0" max="0.05" step="0.0025" value="0.0025">
+      <output id="mu-out" for="mu">0.25%</output>
+    </label>
+    <label class="field" for="kid-age">
+      <span>Show new children at</span>
+      <select id="kid-age">
+        <option value="7">Age 7</option>
+        <option value="15">Age 15</option>
+        <option value="27" selected>Age 27</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main class="studio">
+  <section class="family" aria-label="Family">
+    <div class="couple" id="couple"></div>
+    <section class="outlook" id="outlook" aria-label="Odds for the next child"></section>
+    <section class="kids-section" aria-label="Children">
+      <div class="kids-head">
+        <div>
+          <p class="eyebrow">Offspring</p>
+          <h2 class="panel-title" id="kids-title">Children</h2>
+        </div>
+        <div class="kids-actions">
+          <button class="btn primary" type="button" data-action="conceive" data-n="1">Conceive a child</button>
+          <button class="btn" type="button" data-action="conceive" data-n="4">Conceive four</button>
+          <button class="btn" type="button" data-action="twins">Identical twins</button>
+          <button class="btn" type="button" data-action="clear-kids">Clear</button>
+        </div>
+      </div>
+      <div class="kids" id="kids"></div>
+    </section>
+    <section class="lineage" id="lineage" aria-label="Earlier generations"></section>
+  </section>
+
+  <aside class="specimen" id="specimen" aria-label="Selected person"></aside>
+</main>
+
+<section class="notes" aria-label="About the model">
+  <div>
+    <h2>How the model works</h2>
+    <ul>
+      <li>Each person carries two copies of 22 autosomes plus X and Y. Loci sit at approximate GRCh38 positions, so genes that are close together, like <span class="gene">HERC2</span> and <span class="gene">OCA2</span>, tend to travel together.</li>
+      <li>Eggs and sperm are made by meiosis with Poisson crossovers at sex-specific rates: about 1.55 cM/Mb in mothers and 0.9 cM/Mb in fathers. Sons get their only X, and so their <span class="gene">AR</span> baldness allele, from their mother.</li>
+      <li>Named loci are real genes with published associations. Effect sizes are illustrative and tuned by hand. Loci tagged <em>unmapped</em> stand in for the many small-effect variants behind traits like face shape.</li>
+    </ul>
+  </div>
+  <div>
+    <h2>What it simplifies</h2>
+    <ul>
+      <li>Dimples, cleft chin and widow's peak use the dominant model from school biology. Real inheritance of these traits is murkier.</li>
+      <li>Gene pool frequencies are rough. Real populations vary a great deal within every region, and morphology loci use the same frequencies everywhere.</li>
+      <li>The mutation rate is exaggerated so you can see it happen. Real rates are around one in a hundred million per base per generation.</li>
+    </ul>
+  </div>
+  <div class="dna-io">
+    <h2>DNA codes</h2>
+    <p>Every genome has a text code. Copy one from the specimen sheet, or paste a code here to bring that person in as a founder.</p>
+    <div class="row">
+      <input type="text" id="dna-in" placeholder="AA1-F-…" aria-label="DNA code" spellcheck="false" autocomplete="off">
+      <button class="btn" type="button" data-action="load-dna">Load as founder</button>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="js/genome.js"></script>
+<script src="js/portrait.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

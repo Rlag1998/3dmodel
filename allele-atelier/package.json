@@ -1,0 +1,10 @@
+{
+  "name": "allele-atelier",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Genetics-driven 2D portrait creator",
+  "scripts": {
+    "test": "node --test tests/genome.test.js",
+    "build": "python3 tools/build_artifact.py dist/allele-atelier.html --full"
+  }
+}
